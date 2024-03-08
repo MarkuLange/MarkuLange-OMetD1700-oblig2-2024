@@ -1,4 +1,7 @@
 "use strict"
+
+import {HOST} from "./config.js";
+
 /* DOM-ELEMENTS */
 const buyBtn = document.getElementById("buy")
 const resetBtn = document.getElementById("reset")
@@ -19,40 +22,15 @@ const info = [
     {el: telefonnr, regex: /^[0-9]{8}$/},
     {el: epost, regex: /^[\w-.]+@[\w-]+\.+[\w-]{2,4}$/}
 ]
-const ticketArr = [];
 let valid = true;
 
 /* MAIN CODE */
-class Person {
-    #fName;
-    #lName;
-    #eMail;
-    #tlfNr;
-    constructor(fName, lName, eMail, tlfNr) {
-       this.#fName = fName.charAt(0).toUpperCase() + fName.slice(1).toLowerCase();
-       this.#lName = lName.charAt(0).toUpperCase() + lName.slice(1).toLowerCase();
-       this.#eMail = eMail.toLowerCase();
-       this.#tlfNr = tlfNr;
-    }
-
-    get fullName() {
-        return `${this.#fName} ${this.#lName}`
-    }
-
-    get tlfNr() {
-        return this.#tlfNr;
-    }
-
-    get eMail() {
-        return this.#eMail;
-    }
-}
 const checkValid = function (input){
     const str = input.el.value;
     return !(!str || str === "placeholder" || !input.regex.test(str));
 }
 
-const buyTickets = function () {
+const buyTickets = async function () {
     valid = true;
     document.querySelectorAll(".error").forEach(e => e.remove());
 
@@ -64,20 +42,37 @@ const buyTickets = function () {
     }
     if(valid) {
         const ticket = {
-            customer: new Person(fornavn.value, etternavn.value, epost.value, telefonnr.value),
+            fName: fornavn.value,
+            lName: etternavn.value,
+            eMail: epost.value,
+            tlfNr: telefonnr.value,
             movie: filmValg.value.charAt(0).toUpperCase() + filmValg.value.slice(1),
             amount: antall.value
         }
-        ticketArr.push(ticket);
-        showTicket(ticket);
+
+        // REGISTER TICKET TO SERVER
+       await fetch(`${HOST}/registerTicket`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(ticket)
+        }).then(r => r.text()).then(data => console.log("response from server:", data))
+
+        // GET TICKET ARRAY FROM SERVER
+        const ticketArr= await fetch(`${HOST}/showTicket`).then(r => r.json());
+
+        // SHOW TICKETS AND RESET INPUT BOXES
+        showTicket(ticketArr);
         document.getElementById("order").reset();
     }
 }
 
-const showTicket = function (ticket) {
-    console.log(ticket)
-    billetter.insertAdjacentHTML("afterbegin", `<li>${ticket.movie}: [${ticket.amount}] -
-${ticket.customer.fullName} | ${ticket.customer.tlfNr} | ${ticket.customer.eMail} </li>`)
+
+const showTicket = function (ticketArr) {
+    billetter.innerHTML="";
+    ticketArr.forEach(ticket => billetter.insertAdjacentHTML("afterbegin", `<li>${ticket.movie}: [${ticket.amount}] -
+${ticket.fName} ${ticket.lName} | ${ticket.tlfNr} | ${ticket.eMail} </li>`))
 }
 
 const displayError = function (el){
@@ -93,8 +88,16 @@ buyBtn.addEventListener("click", function (e){
     e.preventDefault();
     buyTickets();
 })
-resetBtn.addEventListener("click", function (){
+resetBtn.addEventListener("click", async function (){
+    // REFACTOR TO EMPTY SERVER ARRAY
+    await fetch(`${HOST}/clearTickets`,{
+        method:"DELETE",
+        headers: {
+            "Content-type" : "application/json"
+        }
+    }).then(r => r.text()).then(d => console.log("Response: "+d));
+
     document.getElementById("order").reset();
-    ticketArr.length = 0;
     billetter.innerHTML="";
 })
+

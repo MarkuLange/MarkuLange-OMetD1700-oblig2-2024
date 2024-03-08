@@ -9,5 +9,4 @@ public class D1700Oblig2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(D1700Oblig2Application.class, args);
 	}
-
 }
