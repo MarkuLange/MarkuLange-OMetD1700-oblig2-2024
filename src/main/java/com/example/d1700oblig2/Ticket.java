@@ -1,21 +1,30 @@
 package com.example.d1700oblig2;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tickets")
 public class Ticket {
-    String fName;
-    String lName;
-    String eMail;
-    String tlfNr;
-    String movie;
-    String amount;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name = "fName")
+    private String fName;
+    @Column(name = "lName")
+    private String lName;
+    @Column(name = "eMail")
+    private String eMail;
+    @Column(name = "tlfNr")
+    private String tlfNr;
+    @Column(name = "movie")
+    private String movie;
+    @Column(name = "amount")
+    private String amount;
 
 
-    public Ticket(String fName, String lName, String eMail, String tlfNr, String movie, String amount) {
-        this.fName = fName;
-        this.lName = lName;
-        this.eMail = eMail;
-        this.tlfNr = tlfNr;
-        this.movie = movie;
-        this.amount = amount;
+    public Ticket() {
+
     }
 
     public String getfName() {
