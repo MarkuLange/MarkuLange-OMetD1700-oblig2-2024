@@ -1,4 +1,4 @@
-package com.example.d1700oblig2;
+package com.example.d1700oblig3;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

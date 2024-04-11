@@ -1,4 +1,4 @@
-package com.example.d1700oblig2;
+package com.example.d1700oblig3;
 
 import jakarta.persistence.*;
 
