@@ -17,7 +17,7 @@ const epost = document.getElementById("epost")
 const info = [
     {el: filmValg, regex: /^[\w-]+$/},
     {el: antall, regex: /^[0-9]{1,2}$/},
-    {el: fornavn, regex: /^[a-zA-ZøæåØÆÅ]+$/},
+    {el: fornavn, regex: /^[a-zA-ZæøåÆØÅ]+$/},
     {el: etternavn, regex: /^[a-zA-ZæøåÆØÅ]+$/},
     {el: telefonnr, regex: /^[0-9]{8}$/},
     {el: epost, regex: /^[\w-.]+@[\w-]+\.+[\w-]{2,4}$/}
@@ -53,16 +53,25 @@ const buyTickets = async function () {
         }
 
         // REGISTER TICKET TO SERVER
-       await fetch(`${HOST}/registerTicket`, {
+        const registerResponse = await fetch(`${HOST}/registerTicket`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             body: JSON.stringify(ticket)
-        }).then(r => r.text()).then(data => console.log("response from server:", data))
+        })
+        if (!registerResponse.ok) {
+            throw new Error("Error ordering tickets")
+        }
+        const registerData = await registerResponse.text();
+        console.log("Response from server:", registerData);
 
         // GET TICKET ARRAY FROM SERVER
-        const ticketArr = await fetch(`${HOST}/showTicket`).then(r => r.json());
+        const ticketResponse = await fetch(`${HOST}/showTicket`)
+        if (!ticketResponse.ok) {
+            throw new Error("Error retrieving tickets")
+        }
+        const ticketArr = await ticketResponse.json();
 
         // SHOW TICKETS AND RESET INPUT BOXES
         showTicket(ticketArr);
@@ -86,18 +95,24 @@ const displayError = function (el){
 }
 
 /* EVENT LISTENERS */
-buyBtn.addEventListener("click", function (e){
+buyBtn.addEventListener("click", async function (e) {
     e.preventDefault();
-    buyTickets();
+    try {
+        await buyTickets();
+    } catch (e) {
+        console.error(e);
+        alert("There has been an error, please try again!")
+    }
 })
+
 resetBtn.addEventListener("click", async function (){
-    // REFACTOR TO EMPTY SERVER ARRAY
+    // Empties array on server, and clears tickets from html
     await fetch(`${HOST}/clearTickets`,{
         method:"DELETE",
         headers: {
             "Content-type" : "application/json"
         }
-    }).then(r => r.text()).then(d => console.log("Response: "+d));
+    }).then(res => res.text()).then(data => console.log("Response from server: " + data));
 
     document.getElementById("order").reset();
     billetter.innerHTML="";

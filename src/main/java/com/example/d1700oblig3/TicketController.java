@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Allow origin where JS is running
 @CrossOrigin(origins = "http://localhost:63342")
 @RestController
 public class TicketController {
-    //ArrayList<TicketInfo> ticketArr = new ArrayList<>();
 
     @Autowired
     private TicketRepository ticketRepository;
