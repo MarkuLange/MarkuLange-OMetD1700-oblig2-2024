@@ -34,12 +34,14 @@ const buyTickets = async function () {
     valid = true;
     document.querySelectorAll(".error").forEach(e => e.remove());
 
+    // check inputs against preset RegEx
     for(let i of info){
         if (!checkValid(i)){
             valid = false;
             displayError(i.el)
         }
     }
+    // Read and register values if valid
     if(valid) {
         const ticket = {
             fName: fornavn.value,
@@ -60,7 +62,7 @@ const buyTickets = async function () {
         }).then(r => r.text()).then(data => console.log("response from server:", data))
 
         // GET TICKET ARRAY FROM SERVER
-        const ticketArr= await fetch(`${HOST}/showTicket`).then(r => r.json());
+        const ticketArr = await fetch(`${HOST}/showTicket`).then(r => r.json());
 
         // SHOW TICKETS AND RESET INPUT BOXES
         showTicket(ticketArr);
@@ -77,7 +79,7 @@ ${ticket.fName} ${ticket.lName} | ${ticket.tlfNr} | ${ticket.eMail} </li>`))
 
 const displayError = function (el){
     if(el.id === "film" || el.id === "antall") {
-        el.insertAdjacentHTML("afterend", `<span class="error"> Vennligst velg ${el.name}</span>`);
+        el.insertAdjacentHTML("afterend", `<span class="error"> Vennligst velg gyldig ${el.name}</span>`);
     } else {
         el.insertAdjacentHTML("afterend", `<span class="error"> Vennligst skriv inn gyldig ${el.name}</span>`);
     }
