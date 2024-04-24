@@ -2,7 +2,7 @@ OsloMet brukernavn: Malan8686
 
 GitHub brukernavn: MarkuLange
 
-Github repo URL: https://github.com/MarkuLange/OMetD1700-oblig2-2024.git
+Github repo URL: https://github.com/MarkuLange/OMetD1700-oblig3-2024.git
 
 Fullt navn: Markus Myklebust Langeland
 
