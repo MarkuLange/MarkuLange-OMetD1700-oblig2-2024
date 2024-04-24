@@ -1,26 +1,112 @@
+:root {
+    --prim-color: #DBA979;
+    --prim-light-color: #ECCA9C;
+    --sec-color: #AFD198;
+    --sec-light-color: #E8EFCF;
+    --ter-color: #2f2c2c;
+    --ter-light-color: #524e4e;
+}
+
+body {
+    background-color: var(--prim-light-color);
+    color: var(--ter-color);
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.bestilling-wrapper {
+    margin: 1vh 5vw;
+    background-color: var(--prim-color);
+    grid-column: 2/3;
+    border: 10px solid var(--ter-color);
+    border-radius: 15%;
+    padding: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin: 5px;
+}
+
 form{
+    position: relative;
+    left: 5vw;
     margin: 14px;
     font-size: 16px;
+    font-weight: bold;
 }
 
 label{
     display: inline-block;
     margin: 2px 0;
-    width: 70px;
-}
-
-button{
-    margin: 10px 0;
+    width: 75px;
 }
 
 .antall {
     margin: 20px 0;
 }
 
+button{
+    font-weight: bold;
+    border-radius: 30%;
+    padding: 5px 8px;
+    border: solid var(--ter-color);
+    margin: 10px 0;
+    background-color: var(--sec-color);
+    color: var(--ter-color);
+}
+
+button:hover {
+    background-color: var(--sec-light-color);
+    border-color: var(--ter-light-color);
+    color: var(--ter-light-color);
+    cursor: pointer;
+}
+
+button:active {
+    background-color: var(--ter-light-color);
+    color: var(--sec-color)
+}
+
+.billett-wrapper {
+    text-align: center;
+    margin: 1vh 5vw;
+    background-color: var(--prim-color);
+    grid-column: 2/3;
+    border: 10px solid var(--ter-color);
+    border-radius: 15%;
+    padding: 5px;
+}
+
+.visInfo {
+    text-align: center;
+}
+
+.billetter {
+    font-weight: bold;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    padding: 0;
+    margin: 0;
+
+}
+
 #reset {
-    margin-left: 14px;;
 }
 
 .error {
-    color: red;
+    margin: 0 5px;
+    color: maroon;
+    position: absolute;
+}
+
+#antall + .error {
+    margin: 20px 5px;
 }
