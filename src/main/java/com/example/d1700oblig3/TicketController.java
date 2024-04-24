@@ -1,6 +1,7 @@
 package com.example.d1700oblig3;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class TicketController {
 
     @GetMapping("/showTicket")
     public List<Ticket> showTickets() {
-        return ticketRepository.findAll();
+        return ticketRepository.findAll(Sort.by(Sort.Direction.DESC, "lName"));
     }
 
     @PostMapping ("/registerTicket")
